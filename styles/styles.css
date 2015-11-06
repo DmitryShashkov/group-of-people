@@ -1,0 +1,8 @@
+.borders {
+    border: 1px groove black;
+    padding: 3px;
+}
+
+.full-width {
+    width: 100%;
+}
