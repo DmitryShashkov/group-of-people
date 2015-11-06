@@ -19,9 +19,13 @@ function Controller () {
         groupView.render(container);
     });
     
-    group.init();
-    groupView.setGroup(group);
-    groupView.render(container);
+    Mediator.subscribe('initGroup', function (hash) {
+        group.init(hash);
+        groupView.setGroup(group);
+        groupView.render(container);
+    });
+    
+    ServerFacade.create('group');
     
     return this;
 }

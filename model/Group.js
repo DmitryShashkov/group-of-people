@@ -18,15 +18,17 @@ function Group () {
         });
     }
     
-    this.init = function () {
-        people = [new Person(1,'Artem','Yekzarkho','male','x23-rd23'),
-            new Person(2,'Yevheniia','Kryschyk','female','jenya_krishchik'),
-            new Person(3,'Yulyia','Lur\'eva','female','lurievajulia'),
-            new Person(4,'Dmytro','Shashkov','male','the_dermatolog'),
-            new Person(5,'Marian','Kotsylovs\'kyi','male','kotsherox2'),
-            new Person(6,'Oleksandr','Poltorak','male','alexandr.poltorak'),
-            new Person(7,'Dmytryi','Hun\'ko','male','gunkodmitriy'),
-            new Person(8,'Oleksandr','Den\'ha','male','san.sanch11')];
+    this.init = function (hash) {
+        var key;
+        for (key in hash) {
+            people.push(new Person(
+                hash[key]['id'],
+                hash[key]['name'],
+                hash[key]['surname'],
+                hash[key]['gender'],
+                hash[key]['skype']
+            ));
+        }
     };
     
     this.toJSON = function () {

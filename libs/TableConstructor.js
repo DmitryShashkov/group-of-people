@@ -11,7 +11,7 @@ function TableConstructor () {
             newCell = newRow.insertCell();
             newCell.classList.add('borders');
             
-            if (item instanceof HTMLInputElement) {
+            if (item instanceof HTMLElement) {
                 newCell.appendChild(item);
             } else {
                 textNode = document.createTextNode(item);
