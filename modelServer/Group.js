@@ -1,4 +1,5 @@
 'use strict';
+var Person = require('./Person');
 
 function Group () {
     var people = [];
@@ -41,3 +42,5 @@ function Group () {
     
     return this;
 }
+
+module.exports = Group;

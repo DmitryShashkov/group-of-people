@@ -1,5 +1,7 @@
 var http = require('http'),
-    fs = require('fs');
+    fs = require('fs'),
+    Person = require('./modelServer/Person'),
+    Group = require('./modelServer/Group');
 
 function isRestRequest (uri) {
     var res = true;
@@ -27,13 +29,25 @@ function handleFiles (request, response) {
     
 function route (request, response) {
     var handlers = {
-            '/hello': helloHandler
+            '/hello': helloHandler,
+            '/students': studentsHandler
         };
     
     function helloHandler () {
         console.log('Saying hello...');
         response.writeHead(200, {});
         response.write('Hello Dmitry!!', function () {         
+            response.end();
+        });
+    }
+    
+    function studentsHandler () {
+        var group = new Group();
+        group.init();
+        
+        console.log('Sending group list...');
+        response.writeHead(200, {});
+        response.write(JSON.stringify(group.toJSON()), function () {         
             response.end();
         });
     }
