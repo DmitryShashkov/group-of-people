@@ -43,7 +43,21 @@ function Person (_id, _name, _surname, _gender, _skype) {
             attributes['gender'],
             attributes['skype'],
         ];
-    }
+    };
+    
+    this.equals = function (item) {
+        var res = false;
+        
+        if ((attributes['id'] === item.get('id')) &&
+            (attributes['name'] === item.get('name')) &&
+            (attributes['surname'] === item.get('surname')) &&
+            (attributes['gender'] === item.get('gender')) &&
+            (attributes['skype'] === item.get('skype'))) {
+                res = true;
+            }
+            
+        return res;
+    };
     
 	return this;
 }

@@ -38,7 +38,24 @@ function Group () {
         });
         
         return hash;
-    }
+    };
+    
+    this.indexOf = function (item) {
+        var index = -1;
+        
+        people.forEach(function (currItem, i) {
+            if (currItem.equals(item)) {
+                index = i;
+            }
+        });
+        
+        return index;
+    };
+    
+    this.delete = function (item) {
+        var index = this.indexOf(item);
+        people.splice(index, 1);
+    };
     
     return this;
 }

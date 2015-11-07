@@ -10,7 +10,7 @@ function GroupView (_group) {
     this.render = function (container) {
         var helper = new Helper(),
             tableConstructor = new TableConstructor(),
-            detailsButton, personArray;
+            detailsButton, deleteButton, personArray;
         
         helper.clearContent(container);
             
@@ -22,8 +22,16 @@ function GroupView (_group) {
                 Mediator.publish('preview', item);
             }, false);
             
+            deleteButton = document.createElement('input');
+            deleteButton.type = 'button';
+            deleteButton.value = 'Delete';
+            deleteButton.addEventListener('click', function () {
+                Mediator.publish('delete', item);
+            }, false);
+            
             personArray = item.toArray();
             personArray.push(detailsButton);
+            personArray.push(deleteButton);
             
             tableConstructor.addRow(personArray);
         });

@@ -20,6 +20,7 @@ function Group () {
     
     this.init = function (hash) {
         var key;
+        people = [];
         for (key in hash) {
             people.push(new Person(
                 hash[key]['id'],

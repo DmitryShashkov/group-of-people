@@ -25,6 +25,10 @@ function Controller () {
         groupView.render(container);
     });
     
+    Mediator.subscribe('delete', function (person) {
+        ServerFacade.delete('person', person);
+    });
+    
     ServerFacade.create('group');
     
     return this;

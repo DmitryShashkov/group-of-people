@@ -1,7 +1,7 @@
 'use strict';
 
 var ServerFacade = (function () {
-    var _sendRequest = function (method, URI, callback) {
+    var _sendRequest = function (method, URI, body, callback) {
             var xhr;
             
             if (XMLHttpRequest) {
@@ -16,21 +16,30 @@ var ServerFacade = (function () {
                     }
                 }, false);
                 
-                xhr.send();
+                xhr.send(body);
             } else {
                 console.warn('Oh noes');
             }
         },
         
-        _create = function (item) {
-            if (item === 'group') {
-                _sendRequest('GET','/students',function (responseText) {
+        _create = function (itemType) {
+            if (itemType === 'group') {
+                _sendRequest('GET', '/getStudents', '', function (responseText) {
                     Mediator.publish('initGroup', JSON.parse(responseText));
                 });
             }  
+        },
+        
+        _delete = function (itemType, itemValue) {
+            if (itemType === 'person') {
+                _sendRequest('DELETE', '/deleteStudent', JSON.stringify(itemValue.toJSON()), function (responseText) {
+                    Mediator.publish('initGroup', JSON.parse(responseText));
+                });
+            }
         };
         
     return {
-        create: _create
+        create: _create,
+        delete: _delete
     };
 })();
