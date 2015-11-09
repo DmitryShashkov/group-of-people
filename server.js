@@ -62,7 +62,7 @@ var Server = (function () {
                         dataObject['skype']);
                     
                 console.log('Deleting student: ' + person.toString());
-                group.delete(person);
+                group.remove(person);
                 response.writeHead(200, {});
                 response.write(JSON.stringify(group.toJSON()), function () {         
                     response.end();

@@ -1,49 +1,50 @@
 'use strict';
 
-function Person (_id, _name, _surname, _gender, _skype) {
-    var attributes = {
-        id: _id,
-	    name: _name,
-		surname: _surname,
-		//age: -1,
-		gender: _gender,
-		skype: _skype};
-	
-    this.set = function (key, value) {
-	    attributes[key] = value;
-		return this;
+var Person = (function () {
+    function Constructor (_id, _name, _surname, _gender, _skype) {
+        var attributes = {
+            id: _id,
+            name: _name,
+            surname: _surname,
+            gender: _gender,
+            skype: _skype};
+            
+        this.set = function (key, value) {
+            attributes[key] = value;
+            return this;
+        };
+        
+        this.get = function (key) {
+            return attributes[key];
+        };
+        
+        return this;
+    }
+    
+    Constructor.prototype.toString = function () {
+		return this.get('name') + ' ' + this.get('surname') + 
+			', ' + this.get('gender');
 	};
 	
-	this.get = function (key) {
-	    return attributes[key];
-	};
-
-	this.toString = function () {
-		return attributes['name'] + ' ' + attributes['surname'] + 
-            //', ' + attributes['age'] + 'years old' + 
-			', ' + attributes['gender'];
-	};
-	
-    this.toJSON = function () {
+    Constructor.prototype.toJSON = function () {
         return {
-            'id': attributes['id'],
-            'name': attributes['name'],
-            'surname': attributes['surname'],
-            //'age': attributes['age'],
-            'gender': attributes['gender'],
-            'skype': attributes['skype']
+            'id': this.get('id'),
+            'name': this.get('name'),
+            'surname': this.get('surname'),
+            'gender': this.get('gender'),
+            'skype': this.get('skype')
         };
     };
     
-    this.toArray = function () {
+    Constructor.prototype.toArray = function () {
         return [
-            attributes['id'],
-            attributes['name'],
-            attributes['surname'],
-            attributes['gender'],
-            attributes['skype'],
+            this.get('id'),
+            this.get('name'),
+            this.get('surname'),
+            this.get('gender'),
+            this.get('skype'),
         ];
-    }
+    };
     
-	return this;
-}
+    return Constructor;
+})(); 

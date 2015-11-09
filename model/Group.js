@@ -1,28 +1,48 @@
 'use strict';
 
-function Group () {
-    var people = [];
+var Group = (function () {
+    function Constructor () {
+        var people = [];
     
-    this.get = function (i) {
-        return people[i];
-    };
-    
-    this.set = function (i, value) {
-        people[i] = value;
+        this.get = function (i) {
+            return people[i];
+        };
+        
+        this.set = function (i, value) {
+            people[i] = value;
+            return this;
+        };
+        
+        this.each = function (applyingFunction) {
+            people.forEach(function (item, i) {
+                applyingFunction(item, i);
+            });
+        };
+        
+        this.push = function (value) {
+            people.push(value);
+        };
+        
+        this.remove = function (item) {
+            var index;
+            
+            if (item) {
+                index = this.indexOf(item);
+                people.splice(index, 1);
+            } else {
+                people = [];
+            }            
+        };
+        
         return this;
-    };
-    
-    this.each = function (applyingFunction) {
-        people.forEach(function (item) {
-            applyingFunction(item);
-        });
     }
     
-    this.init = function (hash) {
+    Constructor.prototype.init = function (hash) {
         var key;
-        people = [];
+        
+        this.remove();
         for (key in hash) {
-            people.push(new Person(
+            this.push(new Person(
                 hash[key]['id'],
                 hash[key]['name'],
                 hash[key]['surname'],
@@ -32,15 +52,27 @@ function Group () {
         }
     };
     
-    this.toJSON = function () {
+    Constructor.prototype.toJSON = function () {
         var hash = {};
         
-        people.forEach(function (item, i) {
+        this.each(function (item, i) {
             hash[i] = item.toJSON();
         });
         
         return hash;
-    }
+    };
     
-    return this;
-}
+    Constructor.prototype.indexOf = function (item) {
+        var index = -1;
+        
+        this.each(function (currItem, i) {
+            if (currItem.equals(item)) {
+                index = i;
+            }
+        });
+        
+        return index;
+    };
+    
+    return Constructor;
+})();
