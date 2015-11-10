@@ -1,8 +1,10 @@
-.borders {
+.divs {
     border: 1px groove black;
     padding: 3px;
+    margin: 5px;
+    width: 300px;
 }
 
-.full-width {
-    width: 100%;
+.buttons {
+    margin: 5px;
 }

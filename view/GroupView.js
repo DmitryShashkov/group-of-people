@@ -8,35 +8,16 @@ function GroupView (_group) {
     }
     
     this.render = function (container) {
-        var helper = new Helper(),
-            tableConstructor = new TableConstructor(),
-            detailsButton, deleteButton, personArray;
+        var div;
         
-        helper.clearContent(container);
+        Helper.clearContent(container);
             
         group.each(function (item) {
-            detailsButton = document.createElement('input');
-            detailsButton.type = 'button';
-            detailsButton.value = 'Details';
-            detailsButton.addEventListener('click', function () {
-                Mediator.publish('preview', item);
-            }, false);
-            
-            deleteButton = document.createElement('input');
-            deleteButton.type = 'button';
-            deleteButton.value = 'Delete';
-            deleteButton.addEventListener('click', function () {
-                Mediator.publish('delete', item);
-            }, false);
-            
-            personArray = item.toArray();
-            personArray.push(detailsButton);
-            personArray.push(deleteButton);
-            
-            tableConstructor.addRow(personArray);
+            div = document.createElement('div');
+            div.appendChild((new PersonShowView()).render(item));
+            div.classList.add('divs');
+            container.appendChild(div);   
         });
-        
-        tableConstructor.deployTable(container);
     }
     
     return this;

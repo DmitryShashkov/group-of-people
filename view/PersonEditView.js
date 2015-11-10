@@ -1,12 +1,11 @@
 'use strict';
 
 function PersonEditView () {     
-    this.render = function (container, person) {
-        var helper = new Helper(),
-            tableConstructor = new TableConstructor(),
-            personHash = person.toJSON(),
+    this.render = function (person, container) {
+        var personHash = person.toJSON(),
             saveButton = document.createElement('input'),
-            userInput, key;
+            resultDiv = document.createElement('div'),
+            userInput, key, div, textNode;
         
         function setPersonProperties () {
             var inputs = document.getElementsByClassName('input');
@@ -18,13 +17,12 @@ function PersonEditView () {
         
         saveButton.type = 'button';
         saveButton.value = 'Save';
-        saveButton.classList.add('full-width');
+        saveButton.classList.add('buttons');
         saveButton.addEventListener('click', function () {
             setPersonProperties();
-            Mediator.publish('preview', person);
+            Mediator.publish('renderGroup', person);
         });
         
-        helper.clearContent(container);
         for (key in personHash) {
             userInput = document.createElement('input');
             userInput.type = 'text';
@@ -32,16 +30,23 @@ function PersonEditView () {
             userInput.id = key;
             userInput.classList.add('input');
             
-            tableConstructor.addRow([
-                key + ':', 
-                userInput
-            ]);
+            div = document.createElement('div');
+            div.appendChild(userInput);
+            textNode = document.createTextNode(' (' + key + ')');
+            div.appendChild(textNode);
+            div.classList.add('divs');
+            
+            resultDiv.appendChild(div);
         }
-        tableConstructor.addRow([
-            saveButton
-        ]);
         
-        tableConstructor.deployTable(container);
+        resultDiv.appendChild(saveButton);
+        
+        if (container) {
+            Helper.clearContent(container);
+            container.appendChild(resultDiv);
+        }
+        
+        return resultDiv;
     }
     
     return this;

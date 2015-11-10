@@ -3,7 +3,7 @@
 function Controller () {
     var group = new Group(),
         groupView = new GroupView(),
-        personShowView = new PersonShowView(),
+        //personShowView = new PersonShowView(),
         personEditView = new PersonEditView(),
         container = document.getElementById('container');
     
@@ -12,7 +12,7 @@ function Controller () {
     });
     
     Mediator.subscribe('edit', function (person) {
-        personEditView.render(container, person);
+        personEditView.render(person, container);
     });
     
     Mediator.subscribe('renderGroup', function () {

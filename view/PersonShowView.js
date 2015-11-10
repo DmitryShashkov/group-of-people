@@ -1,41 +1,39 @@
 'use strict';
 
-function PersonShowView () {    
-    this.render = function (container, person) {
-        var helper = new Helper(),
-            tableConstructor = new TableConstructor(),
-            personHash = person.toJSON(),
-            backButton = document.createElement('input'),
+function PersonShowView (parentNode) {  
+    this.render = function (person, container) {
+        var personTemplate = templates['person'],
             editButton = document.createElement('input'),
-            key;
-        
-        backButton.type = 'button';
-        backButton.value = 'Back';
-        backButton.classList.add('full-width');
-        backButton.addEventListener('click', function () {
-            Mediator.publish('renderGroup');
-        });
+            deleteButton = document.createElement('input'),
+            div = document.createElement('div'),
+            textNode = personTemplate(person.toJSON()),
+            resultDiv = document.createElement('div');
         
         editButton.type = 'button';
         editButton.value = 'Edit';
-        editButton.classList.add('full-width');
+        editButton.classList.add('buttons');
         editButton.addEventListener('click', function () {
             Mediator.publish('edit', person);
         });
         
-        helper.clearContent(container);
-        for (key in personHash) {
-            tableConstructor.addRow([
-                key + ':', 
-                personHash[key]
-            ]);
-        }
-        tableConstructor.addRow([
-            backButton,
-            editButton
-        ]);
+        deleteButton.type = 'button';
+        deleteButton.value = 'Delete';
+        deleteButton.classList.add('buttons');
+        deleteButton.addEventListener('click', function () {
+            Mediator.publish('delete', person);
+        }, false);
         
-        tableConstructor.deployTable(container);
+        div.innerHTML = textNode;
+        resultDiv.appendChild(div);
+        resultDiv.appendChild(editButton);
+        resultDiv.appendChild(deleteButton);
+        
+        if (container) {
+            Helper.clearContent(container);
+            container.appendChild(resultDiv);
+        }
+        
+        return resultDiv;
     }
     
     return this;
