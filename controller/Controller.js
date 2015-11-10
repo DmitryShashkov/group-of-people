@@ -30,11 +30,6 @@ function Controller () {
         personEditView.render(new Person('','','','',''), container);
     });
     
-    Mediator.subscribe('personAdded', function (person) {
-        group.push(person);
-        Mediator.publish('renderGroup');
-    });
-    
     ServerFacade.create('group');
     
     return this;
