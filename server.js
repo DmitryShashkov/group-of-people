@@ -34,7 +34,8 @@ var Server = (function () {
                 '/hello': helloHandler,
                 '/getStudents': studentsHandler,
                 '/deleteStudent': deleteStudentHandler,
-                '/addStudent': addStudentHandler
+                '/addStudent': addStudentHandler,
+                '/editStudent': editStudentHandler
             };
         
         function helloHandler () {
@@ -62,7 +63,7 @@ var Server = (function () {
                         dataObject['gender'],
                         dataObject['skype']);
                     
-                console.log('Deleting student: ' + person.toString());
+                console.log('Deleting student: ' + person.toString() + '...');
                 group.remove(person);
                 response.writeHead(200, {});
                 response.write(JSON.stringify(group.toJSON()), function () {         
@@ -80,10 +81,33 @@ var Server = (function () {
                         dataObject['gender'],
                         dataObject['skype']);
                     
-                console.log('Adding student: ' + person.toString());
+                console.log('Adding student: ' + person.toString() + '...');
                 group.push(person);
                 response.writeHead(200, {});
                 response.write(JSON.stringify(group.toJSON()), function () {         
+                    response.end();
+                });
+            }); 
+        }
+        
+        function editStudentHandler () {
+            request.on('data', function (data) {
+                var dataObject = JSON.parse(data),
+                    oldPerson = new Person(dataObject['old']['id'],
+                        dataObject['old']['name'],
+                        dataObject['old']['surname'],
+                        dataObject['old']['gender'],
+                        dataObject['old']['skype']),
+                    newPerson = new Person(dataObject['new']['id'],
+                        dataObject['new']['name'],
+                        dataObject['new']['surname'],
+                        dataObject['new']['gender'],
+                        dataObject['new']['skype']);
+                    
+                console.log('Replacing ' + oldPerson.toString() + ' with ' + newPerson.toString() + '...');
+                group.set(group.indexOf(oldPerson), newPerson);
+                response.writeHead(200, {});
+                response.write('OK', function () {         
                     response.end();
                 });
             }); 

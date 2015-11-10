@@ -39,14 +39,26 @@ var ServerFacade = (function () {
         },
         
         _add = function (item) {
-            _sendRequest('POST', 'addStudent', JSON.stringify(item.toJSON()), function (responseText) {
+            _sendRequest('POST', '/addStudent', JSON.stringify(item.toJSON()), function (responseText) {
                 Mediator.publish('initGroup', JSON.parse(responseText));
             });
+        },
+        
+        _update = function (oldHash, newPerson) {
+            _sendRequest('PATCH', '/editStudent', 
+                JSON.stringify({
+                    'old': oldHash,
+                    'new': newPerson.toJSON()
+                }),
+                function (responseText) {
+                    Mediator.publish('renderGroup');
+                });
         };
         
     return {
         create: _create,
         delete: _delete,
-        add: _add
+        add: _add,
+        update: _update
     };
 })();

@@ -32,10 +32,10 @@ function PersonEditView (_mode) {
         saveButton.value = (this.get('mode') === 'save') ? 'Save' : 'Add';
         saveButton.classList.add('buttons');
         saveButton.mode = this.get('mode');
-        saveButton.addEventListener('click', function () {
+        saveButton.addEventListener('click', function () {   
             setPersonProperties();
             if (this.mode === 'save') {
-                Mediator.publish('renderGroup');
+                ServerFacade.update(personHash, person);
             } else {
                 ServerFacade.add(person);
             }
