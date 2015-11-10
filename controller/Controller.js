@@ -3,15 +3,11 @@
 function Controller () {
     var group = new Group(),
         groupView = new GroupView(),
-        //personShowView = new PersonShowView(),
-        personEditView = new PersonEditView(),
+        personEditView = new PersonEditView('save'),
         container = document.getElementById('container');
     
-    Mediator.subscribe('preview', function (person) {
-        personShowView.render(container, person);
-    });
-    
     Mediator.subscribe('edit', function (person) {
+        personEditView.set('mode', 'save');
         personEditView.render(person, container);
     });
     
@@ -27,6 +23,16 @@ function Controller () {
     
     Mediator.subscribe('delete', function (person) {
         ServerFacade.delete('person', person);
+    });
+    
+    Mediator.subscribe('add', function () {
+        personEditView.set('mode', 'add');
+        personEditView.render(new Person('','','','',''), container);
+    });
+    
+    Mediator.subscribe('personAdded', function (person) {
+        group.push(person);
+        Mediator.publish('renderGroup');
     });
     
     ServerFacade.create('group');

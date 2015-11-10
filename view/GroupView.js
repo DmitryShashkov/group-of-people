@@ -8,7 +8,8 @@ function GroupView (_group) {
     }
     
     this.render = function (container) {
-        var div;
+        var addButton = document.createElement('input'),
+            div;
         
         Helper.clearContent(container);
             
@@ -18,6 +19,15 @@ function GroupView (_group) {
             div.classList.add('divs');
             container.appendChild(div);   
         });
+        
+        addButton.type = 'button';
+        addButton.value = 'Add new student';
+        addButton.classList.add('buttons');
+        addButton.addEventListener('click', function () {
+            Mediator.publish('add');
+        });
+        
+        container.appendChild(addButton);
     }
     
     return this;

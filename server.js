@@ -33,7 +33,8 @@ var Server = (function () {
         var handlers = {
                 '/hello': helloHandler,
                 '/getStudents': studentsHandler,
-                '/deleteStudent': deleteStudentHandler
+                '/deleteStudent': deleteStudentHandler,
+                '/addStudent': addStudentHandler
             };
         
         function helloHandler () {
@@ -63,6 +64,24 @@ var Server = (function () {
                     
                 console.log('Deleting student: ' + person.toString());
                 group.remove(person);
+                response.writeHead(200, {});
+                response.write(JSON.stringify(group.toJSON()), function () {         
+                    response.end();
+                });
+            }); 
+        }
+        
+        function addStudentHandler () {
+            request.on('data', function (data) {
+                var dataObject = JSON.parse(data),
+                    person = new Person(dataObject['id'],
+                        dataObject['name'],
+                        dataObject['surname'],
+                        dataObject['gender'],
+                        dataObject['skype']);
+                    
+                console.log('Adding student: ' + person.toString());
+                group.push(person);
                 response.writeHead(200, {});
                 response.write(JSON.stringify(group.toJSON()), function () {         
                     response.end();

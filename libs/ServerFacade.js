@@ -36,10 +36,17 @@ var ServerFacade = (function () {
                     Mediator.publish('initGroup', JSON.parse(responseText));
                 });
             }
+        },
+        
+        _add = function (item) {
+            _sendRequest('POST', 'addStudent', JSON.stringify(item.toJSON()), function (responseText) {
+                Mediator.publish('initGroup', JSON.parse(responseText));
+            });
         };
         
     return {
         create: _create,
-        delete: _delete
+        delete: _delete,
+        add: _add
     };
 })();

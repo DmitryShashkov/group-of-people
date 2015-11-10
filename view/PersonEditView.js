@@ -1,6 +1,19 @@
 'use strict';
 
-function PersonEditView () {     
+function PersonEditView (_mode) {
+    var attributes = {
+            mode: _mode
+        };
+    
+    this.set = function (key, value) {
+        attributes[key] = value;
+        return this;
+    };
+    
+    this.get = function (key) {
+        return attributes[key];
+    };
+    
     this.render = function (person, container) {
         var personHash = person.toJSON(),
             saveButton = document.createElement('input'),
@@ -16,11 +29,17 @@ function PersonEditView () {
         }
         
         saveButton.type = 'button';
-        saveButton.value = 'Save';
+        saveButton.value = (this.get('mode') === 'save') ? 'Save' : 'Add';
         saveButton.classList.add('buttons');
+        saveButton.mode = this.get('mode');
         saveButton.addEventListener('click', function () {
             setPersonProperties();
-            Mediator.publish('renderGroup', person);
+            if (this.mode === 'save') {
+                Mediator.publish('renderGroup');
+            } else {
+                ServerFacade.add(person);
+            }
+            
         });
         
         for (key in personHash) {
