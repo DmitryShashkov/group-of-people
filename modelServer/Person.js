@@ -1,25 +1,22 @@
 'use strict';
 
-var Person = (function () {
+var Model = require('./Model'),
+    Helper = require('../libsServer/Helper'),
+    
+    Person = (function () {
     function Constructor (_id, _name, _surname, _gender, _skype) {
-        var attributes = {
+        Person.super.call(this, {
             id: _id,
             name: _name,
             surname: _surname,
             gender: _gender,
-            skype: _skype};
-            
-        this.set = function (key, value) {
-            attributes[key] = value;
-            return this;
-        };
-        
-        this.get = function (key) {
-            return attributes[key];
-        };
+            skype: _skype
+        });
         
         return this;
     }
+    
+    Helper.extend(Constructor, Model);
     
     Constructor.prototype.toString = function () {
 		return this.get('name') + ' ' + this.get('surname') + 

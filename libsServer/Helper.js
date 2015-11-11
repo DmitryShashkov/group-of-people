@@ -21,3 +21,5 @@ var Helper = (function () {
         'extend': extend
     };
 })();
+
+module.exports = Helper;

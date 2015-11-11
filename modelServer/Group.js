@@ -1,42 +1,15 @@
 'use strict';
-var Person = require('./Person');
-
-var Group = (function () {
-    function Constructor () {
-        var people = [];
+var Person = require('./Person'),
+    Collection = require('./Collection'),
+    Helper = require('../libsServer/Helper'), 
     
-        this.get = function (i) {
-            return people[i];
-        };
-        
-        this.set = function (i, value) {
-            people[i] = value;
-            return this;
-        };
-        
-        this.each = function (applyingFunction) {
-            people.forEach(function (item, i) {
-                applyingFunction(item, i);
-            });
-        };
-        
-        this.push = function (value) {
-            people.push(value);
-        };
-        
-        this.remove = function (item) {
-            var index;
-            
-            if (item) {
-                index = this.indexOf(item);
-                people.splice(index, 1);
-            } else {
-                people = [];
-            }            
-        };
-        
+    Group = (function () {
+    function Constructor () {
+        Group.super.call(this);
         return this;
     }
+    
+    Helper.extend(Constructor, Collection);
     
     Constructor.prototype.init = function () {
         var people = [new Person(1,'Artem','Yekzarkho','male','x23-rd23'),
@@ -53,28 +26,6 @@ var Group = (function () {
         for (i = 0; i < people.length; i++) {
             this.set(i, people[i]);
         }
-    };
-    
-    Constructor.prototype.toJSON = function () {
-        var hash = {};
-        
-        this.each(function (item, i) {
-            hash[i] = item.toJSON();
-        });
-        
-        return hash;
-    };
-    
-    Constructor.prototype.indexOf = function (item) {
-        var index = -1;
-        
-        this.each(function (currItem, i) {
-            if (currItem.equals(item)) {
-                index = i;
-            }
-        });
-        
-        return index;
     };
     
     return Constructor;
