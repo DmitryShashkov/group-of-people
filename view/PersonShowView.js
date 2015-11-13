@@ -1,40 +1,39 @@
 'use strict';
 
-function PersonShowView (parentNode) {  
-    this.render = function (person, container) {
+var PersonShowView = (function () {
+    var Constructor = function () {
+        return this;
+    }
+    
+    Constructor.prototype.render = function (person, $container) {
         var personTemplate = templates['person'],
-            editButton = document.createElement('input'),
-            deleteButton = document.createElement('input'),
-            div = document.createElement('div'),
-            textNode = personTemplate(person.toJSON()),
-            resultDiv = document.createElement('div');
+            $editButton = $('<input type = \'button\' value = \'Edit\'>'),
+            $deleteButton = $('<input type = \'button\' value = \'Delete\'>'),
+            $div = $('<div></div>'),
+            $resultDiv = $('<div></div>');
         
-        editButton.type = 'button';
-        editButton.value = 'Edit';
-        editButton.classList.add('buttons');
-        editButton.addEventListener('click', function () {
+        $editButton.addClass('buttons');
+        $editButton.on('click', function () {
             Mediator.publish('edit', person);
         });
         
-        deleteButton.type = 'button';
-        deleteButton.value = 'Delete';
-        deleteButton.classList.add('buttons');
-        deleteButton.addEventListener('click', function () {
+        $deleteButton.addClass('buttons');
+        $deleteButton.on('click', function () {
             Mediator.publish('delete', person);
-        }, false);
+        });
         
-        div.innerHTML = textNode;
-        resultDiv.appendChild(div);
-        resultDiv.appendChild(editButton);
-        resultDiv.appendChild(deleteButton);
+        $div.append(personTemplate(person.toJSON()));
+        $resultDiv.append($div);
+        $resultDiv.append($editButton);
+        $resultDiv.append($deleteButton);
         
-        if (container) {
-            Helper.clearContent(container);
-            container.appendChild(resultDiv);
+        if ($container) {
+            Helper.clearContent($container);
+            $container.append(resultDiv);
         }
         
-        return resultDiv;
+        return $resultDiv;
     }
     
-    return this;
-}
+    return Constructor;
+})();

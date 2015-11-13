@@ -1,72 +1,72 @@
 'use strict';
 
-function PersonEditView (_mode) {
-    var attributes = {
+var PersonEditView = (function () {
+    var Constructor = function (_mode) {
+        var attributes = {
             mode: _mode
         };
     
-    this.set = function (key, value) {
-        attributes[key] = value;
+        this.set = function (key, value) {
+            attributes[key] = value;
+            return this;
+        };
+        
+        this.get = function (key) {
+            return attributes[key];
+        };
+        
         return this;
-    };
+    }
     
-    this.get = function (key) {
-        return attributes[key];
-    };
-    
-    this.render = function (person, container) {
+    Constructor.prototype.render = function (person, $container) {
         var personHash = person.toJSON(),
-            saveButton = document.createElement('input'),
-            resultDiv = document.createElement('div'),
-            userInput, key, div, textNode;
+            $saveButton = $('<input type = \'button\'>'),
+            $resultDiv = $('<div></div>'),
+            $userInput, $div, key;
         
         function setPersonProperties () {
-            var inputs = document.getElementsByClassName('input');
+            var $inputs = $('.input');
             
-            [].forEach.call (inputs, function (item) {
-                person.set(item.id, item.value);
+            $inputs.each (function (i) {
+                person.set($(this).attr('id'), $(this).val());
             });
         }
         
-        saveButton.type = 'button';
-        saveButton.value = (this.get('mode') === 'save') ? 'Save' : 'Add';
-        saveButton.classList.add('buttons');
-        saveButton.mode = this.get('mode');
-        saveButton.addEventListener('click', function () {   
+        $saveButton.val((this.get('mode') === 'save') ? 'Save' : 'Add');
+        $saveButton.addClass('buttons');
+        $saveButton.attr('mode', this.get('mode'));
+        $saveButton.on('click', function () {   
             setPersonProperties();
-            if (this.mode === 'save') {
+            if ($(this).attr('mode') === 'save') {
                 ServerFacade.update(personHash, person);
             } else {
                 ServerFacade.add(person);
-            }
-            
+            } 
         });
         
         for (key in personHash) {
-            userInput = document.createElement('input');
-            userInput.type = 'text';
-            userInput.value = personHash[key];
-            userInput.id = key;
-            userInput.classList.add('input');
+            $userInput = $('<input type = \'text\'>');
+            $userInput.val(personHash[key]);
+            $userInput.attr('id', key);
+            $userInput.addClass('input');
             
-            div = document.createElement('div');
-            div.appendChild(userInput);
-            textNode = document.createTextNode(' (' + key + ')');
-            div.appendChild(textNode);
-            div.classList.add('divs');
+            $div = $('<div></div>');
+            $div.append($userInput);
+            $div.append(' (' + key + ')');
+            $div.addClass('divs');
             
-            resultDiv.appendChild(div);
+            $resultDiv.append($div);
         }
         
-        resultDiv.appendChild(saveButton);
+        $resultDiv.append($saveButton);
         
-        if (container) {
-            Helper.clearContent(container);
-            container.appendChild(resultDiv);
+        if ($container) {
+            Helper.clearContent($container);
+            $container.append($resultDiv);
         }
         
-        return resultDiv;
+        return $resultDiv;
     }
     
-    return this;
-}
+    return Constructor;
+})();

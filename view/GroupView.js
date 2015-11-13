@@ -1,34 +1,43 @@
 'use strict';
 
-function GroupView (_group) {
-    var group = _group;
+var GroupView = (function () {
+    function Constructor (_group) {
+        var attributes = {
+            group: _group
+        };
+    
+        this.set = function (key, value) {
+            attributes[key] = value;
+            return this;
+        };
         
-    this.setGroup = function (value) {
-        group = value;
+        this.get = function (key) {
+            return attributes[key];
+        };
+        
+        return this;
     }
     
-    this.render = function (container) {
-        var addButton = document.createElement('input'),
-            div;
+    Constructor.prototype.render = function ($container) {
+        var group = this.get('group'),
+            $addButton = $('<input type = \'button\' value = \'Add new student\'>'),
+            $div;
         
-        Helper.clearContent(container);
+        Helper.clearContent($container);
             
         group.each(function (item) {
-            div = document.createElement('div');
-            div.appendChild((new PersonShowView()).render(item));
-            div.classList.add('divs');
-            container.appendChild(div);   
+            $div = $('<div></div>');
+            $div.append((new PersonShowView()).render(item));
+            $div.addClass('divs');
+            $container.append($div);   
         });
         
-        addButton.type = 'button';
-        addButton.value = 'Add new student';
-        addButton.classList.add('buttons');
-        addButton.addEventListener('click', function () {
+        $addButton.addClass('buttons');
+        $addButton.on('click', function () {
             Mediator.publish('add');
         });
-        
-        container.appendChild(addButton);
+        $container.append($addButton);
     }
     
-    return this;
-}
+    return Constructor;
+})();

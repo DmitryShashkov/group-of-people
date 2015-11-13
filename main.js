@@ -1,7 +1,5 @@
 'use strict';
 
-window.addEventListener('load', main, false);
-
-function main () {
+$(function () {
 	var controller = new Controller();
-}
+});
