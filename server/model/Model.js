@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('../libsServer/underscore-min'),
+var _ = require('../libs/underscore-min'),
 
     Model = (function () {
     function Constructor (hash) {

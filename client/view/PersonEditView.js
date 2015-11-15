@@ -10,7 +10,6 @@ var PersonEditView = (function () {
             attributes[key] = value;
             return this;
         };
-        
         this.get = function (key) {
             return attributes[key];
         };
@@ -19,47 +18,33 @@ var PersonEditView = (function () {
     }
     
     Constructor.prototype.render = function (person, $container) {
-        var personHash = person.toJSON(),
-            $saveButton = $('<input type = \'button\'>'),
+        var personTemplate = templates['personEdit'],
+            personHash = person.toJSON(),
             $resultDiv = $('<div></div>'),
-            $userInput, $div, key;
+            $saveButton;
         
         function setPersonProperties () {
             var $inputs = $('.input');
             
-            $inputs.each (function (i) {
-                person.set($(this).attr('id'), $(this).val());
+            $inputs.each (function (i, item) {
+                person.set($(item).attr('id'), $(item).val());
             });
         }
         
+        $resultDiv.append(personTemplate(person.toJSON()));
+        
+        $saveButton = $resultDiv.find('#saveButton');
         $saveButton.val((this.get('mode') === 'save') ? 'Save' : 'Add');
-        $saveButton.addClass('buttons');
         $saveButton.attr('mode', this.get('mode'));
         $saveButton.on('click', function () {   
             setPersonProperties();
             if ($(this).attr('mode') === 'save') {
-                ServerFacade.update(personHash, person);
+                ServerFacade.update(personHash, person.toJSON());
             } else {
                 ServerFacade.add(person);
             } 
         });
-        
-        for (key in personHash) {
-            $userInput = $('<input type = \'text\'>');
-            $userInput.val(personHash[key]);
-            $userInput.attr('id', key);
-            $userInput.addClass('input');
-            
-            $div = $('<div></div>');
-            $div.append($userInput);
-            $div.append(' (' + key + ')');
-            $div.addClass('divs');
-            
-            $resultDiv.append($div);
-        }
-        
-        $resultDiv.append($saveButton);
-        
+
         if ($container) {
             Helper.clearContent($container);
             $container.append($resultDiv);

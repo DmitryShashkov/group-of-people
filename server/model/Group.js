@@ -1,7 +1,7 @@
 'use strict';
 var Person = require('./Person'),
     Collection = require('./Collection'),
-    Helper = require('../libsServer/Helper'), 
+    Helper = require('../libs/Helper'), 
     
     Group = (function () {
     function Constructor () {

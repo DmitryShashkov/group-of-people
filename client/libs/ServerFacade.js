@@ -25,7 +25,7 @@ var ServerFacade = (function () {
         _create = function (itemType) {
             if (itemType === 'group') {
                 _sendRequest('GET', '/getStudents', '', function (responseText) {
-                    Mediator.publish('initGroup', JSON.parse(responseText));
+                    Mediator.publish('groupReceived', JSON.parse(responseText));
                 });
             }  
         },
@@ -33,31 +33,31 @@ var ServerFacade = (function () {
         _delete = function (itemType, itemValue) {
             if (itemType === 'person') {
                 _sendRequest('DELETE', '/deleteStudent', JSON.stringify(itemValue.toJSON()), function (responseText) {
-                    Mediator.publish('initGroup', JSON.parse(responseText));
+                    Mediator.publish('groupReceived', JSON.parse(responseText));
                 });
             }
         },
         
         _add = function (item) {
             _sendRequest('POST', '/addStudent', JSON.stringify(item.toJSON()), function (responseText) {
-                Mediator.publish('initGroup', JSON.parse(responseText));
+                Mediator.publish('groupReceived', JSON.parse(responseText));
             });
         },
         
-        _update = function (oldHash, newPerson) {
+        _update = function (oldHash, newHash) {
             _sendRequest('PATCH', '/editStudent', 
                 JSON.stringify({
                     'old': oldHash,
-                    'new': newPerson.toJSON()
+                    'new': newHash
                 }),
                 function (responseText) {
-                    Mediator.publish('renderGroup');
+                    Mediator.publish('groupUpdated');
                 });
         };
         
     return {
         create: _create,
-        delete: _delete,
+        remove: _delete,
         add: _add,
         update: _update
     };

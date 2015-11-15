@@ -1,7 +1,7 @@
 'use strict';
 
 var Model = require('./Model'),
-    Helper = require('../libsServer/Helper'),
+    Helper = require('../libs/Helper'),
     
     Person = (function () {
     function Constructor (_id, _name, _surname, _gender, _skype) {

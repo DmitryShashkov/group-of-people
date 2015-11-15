@@ -1,8 +1,8 @@
 var Server = (function () {
     var http = require('http'),
     fs = require('fs'),
-    Person = require('./modelServer/Person'),
-    Group = require('./modelServer/Group'),
+    Person = require('./model/Person'),
+    Group = require('./model/Group'),
     group = new Group();
 
     function isRestRequest (uri) {
@@ -18,7 +18,7 @@ var Server = (function () {
     function handleFiles (request, response) {
         console.log('Got request for ' + request.url);
         response.writeHead(200, {});
-        fs.readFile(request.url.replace('\/', ''), function (err, data) {
+        fs.readFile('../client/' + request.url.replace('\/', ''), function (err, data) {
             if (err) {
                 console.log('[ERROR]: request for ' + request.url);
             } else {

@@ -1,5 +1,5 @@
 'use strict';
-var _ = require('../libsServer/underscore-min'),
+var _ = require('../libs/underscore-min'),
 
     Collection = (function () {
     function Constructor () {

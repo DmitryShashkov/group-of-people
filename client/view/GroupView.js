@@ -20,7 +20,7 @@ var GroupView = (function () {
     
     Constructor.prototype.render = function ($container) {
         var group = this.get('group'),
-            $addButton = $('<input type = \'button\' value = \'Add new student\'>'),
+            $addButton = $('<input type = \'button\' value = \'Add new student\' class=\'buttons\'>'),
             $div;
         
         Helper.clearContent($container);
@@ -32,9 +32,8 @@ var GroupView = (function () {
             $container.append($div);   
         });
         
-        $addButton.addClass('buttons');
         $addButton.on('click', function () {
-            Mediator.publish('add');
+            Mediator.publish('addingRequested');
         });
         $container.append($addButton);
     }
