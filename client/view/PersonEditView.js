@@ -1,23 +1,7 @@
 'use strict';
 
-var PersonEditView = (function () {
-    var Constructor = function (_mode) {
-        var attributes = {
-            mode: _mode
-        };
-    
-        this.set = function (key, value) {
-            attributes[key] = value;
-            return this;
-        };
-        this.get = function (key) {
-            return attributes[key];
-        };
-        
-        return this;
-    }
-    
-    Constructor.prototype.render = function (person, $container) {
+var PersonEditView = Backbone.View.extend({
+    render: function (person, $container, mode) {
         var personTemplate = templates['personEdit'],
             personHash = person.toJSON(),
             $resultDiv = $('<div></div>'),
@@ -34,8 +18,8 @@ var PersonEditView = (function () {
         $resultDiv.append(personTemplate(person.toJSON()));
         
         $saveButton = $resultDiv.find('#saveButton');
-        $saveButton.val((this.get('mode') === 'save') ? 'Save' : 'Add');
-        $saveButton.attr('mode', this.get('mode'));
+        $saveButton.val((mode === 'save') ? 'Save' : 'Add');
+        $saveButton.attr('mode', mode);
         $saveButton.on('click', function () {   
             setPersonProperties();
             if ($(this).attr('mode') === 'save') {
@@ -52,6 +36,4 @@ var PersonEditView = (function () {
         
         return $resultDiv;
     }
-    
-    return Constructor;
-})();
+}); 

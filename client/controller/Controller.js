@@ -1,39 +1,42 @@
 'use strict';
 
 var Controller = (function () {
+    var group = new Group(),
+        groupView = new GroupView(),
+        personEditView = new PersonEditView();
+            
     function Constructor () {
-        var group = new Group(),
-            groupView = new GroupView(),
-            personEditView = new PersonEditView('save'),
-            $container = $('#container');
+        setupMediator();
+        ServerFacade.create('group');
+        
+        return this;
+    }
     
-        Mediator.subscribe('editingRequested', function (person) {
-            personEditView.set('mode', 'save');
-            personEditView.render(person, $container);
+    function setupMediator () {
+        Mediator.subscribe('groupReceived', function (groupHash) {
+            groupReRender(groupHash);
         });
         
         Mediator.subscribe('groupUpdated', function () {
-            groupView.render($container);
-        });
-        
-        Mediator.subscribe('groupReceived', function (hash) {
-            group.init(hash);
-            groupView.set('group', group);
-            groupView.render($container);
+            groupView.render(group, $('#container'));
         });
         
         Mediator.subscribe('removingRequested', function (person) {
             ServerFacade.remove('person', person);
         });
         
-        Mediator.subscribe('addingRequested', function () {
-            personEditView.set('mode', 'add');
-            personEditView.render(new Person('','','','',''), $container);
+        Mediator.subscribe('editingRequested', function (person) {
+            personEditView.render(person, $('#container'), 'save');
         });
         
-        ServerFacade.create('group');
-        
-        return this;
+        Mediator.subscribe('addingRequested', function () {
+            personEditView.render(new Person({}), $('#container'), 'add');
+        });
+    }
+    
+    function groupReRender (groupHash) {
+        group.init(groupHash);
+        groupView.render(group, $('#container'));
     }
     
     return Constructor;

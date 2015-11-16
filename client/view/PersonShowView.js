@@ -1,11 +1,7 @@
 'use strict';
 
-var PersonShowView = (function () {
-    var Constructor = function () {
-        return this;
-    }
-    
-    Constructor.prototype.render = function (person, $container) {
+var PersonShowView = Backbone.View.extend({
+    render: function (person, $container) {
         var personTemplate = templates['personShow'],
             $resultDiv = $('<div></div>');
         
@@ -25,6 +21,4 @@ var PersonShowView = (function () {
         
         return $resultDiv;
     }
-    
-    return Constructor;
-})();
+});
