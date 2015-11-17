@@ -2,8 +2,7 @@
 
 var Controller = (function () {
     var group = new Group(),
-        groupView = new GroupView(),
-        personEditView = new PersonEditView();
+        groupView = new GroupView({models: group});
             
     function Constructor () {
         setupMediator();
@@ -18,7 +17,7 @@ var Controller = (function () {
         });
         
         Mediator.subscribe('groupUpdated', function () {
-            groupView.render(group, $('#container'));
+            groupView.render($('#container'));
         });
         
         Mediator.subscribe('removingRequested', function (person) {
@@ -26,17 +25,23 @@ var Controller = (function () {
         });
         
         Mediator.subscribe('editingRequested', function (person) {
-            personEditView.render(person, $('#container'), 'save');
+            $('#container').html(new PersonEditView({
+                model: person,
+                mode: 'save'
+            }).render().$el);
         });
         
         Mediator.subscribe('addingRequested', function () {
-            personEditView.render(new Person({}), $('#container'), 'add');
+            $('#container').html(new PersonEditView({
+                model: new Person({}),
+                mode: 'add'
+            }).render().$el);
         });
     }
     
     function groupReRender (groupHash) {
         group.init(groupHash);
-        groupView.render(group, $('#container'));
+        groupView.render($('#container'));
     }
     
     return Constructor;

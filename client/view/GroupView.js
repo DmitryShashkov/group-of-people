@@ -1,22 +1,24 @@
 'use strict';
 
 var GroupView = Backbone.View.extend({
-    render: function (group, $container) {
-        var $addButton = $('<input type = \'button\' value = \'Add new student\' class=\'buttons\'>'),
-            $div;
-        
-        Helper.clearContent($container);
+    initialize: function (params) {
+        if (params.models) {
+            this.models = params.models;
+        }
+    },
+    render: function ($container) {      
+        $container.html('');
             
-        group.each(function (item) {
-            $div = $('<div></div>');
-            $div.append((new PersonShowView()).render(item));
-            $div.addClass('divs');
-            $container.append($div);   
+        this.models.each(function (item) {
+            $container.append((new PersonShowView({model: item})).render().$el);   
         });
         
-        $addButton.on('click', function () {
+        $container.append($('<input type = \'button\' value = \'Add new student\'' + 
+            ' id = \'addButton\' class=\'buttons\'>'));
+        $container.find('#addButton').on('click',function () {
             Mediator.publish('addingRequested');
         });
-        $container.append($addButton);
+            
+        return $container;
     }
 });

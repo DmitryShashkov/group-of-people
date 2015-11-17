@@ -7,7 +7,7 @@ var Group = Backbone.Collection.extend({
         
         this.reset();
         for (key in hash) {
-            this.push(new Person(hash[key]));
+            this.models.push(new Person(hash[key]));
         }
     }
 });

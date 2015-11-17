@@ -18,14 +18,5 @@ var Person = Backbone.Model.extend ({
     toString: function () {
 		return this.get('name') + ' ' + this.get('surname') + 
 			', ' + this.get('gender');
-	},
-    toJSON: function () {
-        return {
-            'id': this.get('id'),
-            'name': this.get('name'),
-            'surname': this.get('surname'),
-            'gender': this.get('gender'),
-            'skype': this.get('skype')
-        };
-    }
+	}
 });

@@ -126,6 +126,7 @@ var Server = (function () {
         }
     }).listen(3000);
     group.init();
+    console.log('Server started');
 })();
 
 

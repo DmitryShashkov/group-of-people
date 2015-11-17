@@ -1,24 +1,24 @@
 'use strict';
 
 var PersonShowView = Backbone.View.extend({
-    render: function (person, $container) {
-        var personTemplate = templates['personShow'],
-            $resultDiv = $('<div></div>');
-        
-        $resultDiv.append(personTemplate(person.toJSON()));
-        
-        $resultDiv.find('#editButton').on('click', function () {
-            Mediator.publish('editingRequested', person);
-        });
-        $resultDiv.find('#deleteButton').on('click', function () {
-            Mediator.publish('removingRequested', person);
-        });
-        
-        if ($container) {
-            Helper.clearContent($container);
-            $container.append(resultDiv);
+    template: templates['personShow'],
+    className: 'divs',
+    events: {
+        'click #editButton': function () {
+            Mediator.publish('editingRequested', this.model);
+        },
+        'click #deleteButton': function () {
+            Mediator.publish('removingRequested', this.model);
         }
+    },
+    initialize: function (params) {
+        if (params.model) {
+            this.model = params.model;
+        }
+    },
+    render: function () {
+        this.$el.append(this.template(this.model.toJSON()));
         
-        return $resultDiv;
+        return this;
     }
 });

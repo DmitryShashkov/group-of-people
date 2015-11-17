@@ -1,39 +1,39 @@
 'use strict';
 
 var PersonEditView = Backbone.View.extend({
-    render: function (person, $container, mode) {
-        var personTemplate = templates['personEdit'],
-            personHash = person.toJSON(),
-            $resultDiv = $('<div></div>'),
-            $saveButton;
-        
-        function setPersonProperties () {
-            var $inputs = $('.input');
-            
-            $inputs.each (function (i, item) {
-                person.set($(item).attr('id'), $(item).val());
-            });
+    template: templates['personEdit'],
+    events: {
+        'click #saveButton': function () {
+            this.saveChanges();
+        } 
+    },
+    initialize: function (params) {
+        if (params.model) {
+            this.model = params.model;
+            this.oldHash = this.model.toJSON();
         }
-        
-        $resultDiv.append(personTemplate(person.toJSON()));
-        
-        $saveButton = $resultDiv.find('#saveButton');
-        $saveButton.val((mode === 'save') ? 'Save' : 'Add');
-        $saveButton.attr('mode', mode);
-        $saveButton.on('click', function () {   
-            setPersonProperties();
-            if ($(this).attr('mode') === 'save') {
-                ServerFacade.update(personHash, person.toJSON());
-            } else {
-                ServerFacade.add(person);
-            } 
+        if (params.mode) {
+            this.mode = params.mode;
+        }
+    },
+    saveChanges: function () {   
+        this.setPersonProperties();
+        if (this.mode === 'save') { 
+            ServerFacade.update(this.oldHash, this.model.toJSON());
+        } else {
+            ServerFacade.add(this.model);
+        } 
+    },
+    setPersonProperties: function () {
+        var model = this.model;
+        this.$('.input').each (function (i, item) {
+            model.set($(item).attr('id'), $(item).val());
         });
-
-        if ($container) {
-            Helper.clearContent($container);
-            $container.append($resultDiv);
-        }
+    },
+    render: function () {
+        this.$el.append(this.template(this.model.toJSON()));
+        this.$('#saveButton').val((this.mode === 'save') ? 'Save' : 'Add');
         
-        return $resultDiv;
+        return this;
     }
 }); 
