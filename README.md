@@ -14,4 +14,4 @@ To run this application:
 - make sure that Node is installed at your PC;
 - download this project as .ZIP-archive and extract its content;
 - run server/server.js via Node;
-- go to localhost:3000 in your browser.
+- go to localhost:3000/index.html in your browser.
